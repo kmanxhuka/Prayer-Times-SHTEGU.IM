@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="sq">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Kohët e Namazit</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    body{margin:0;font-family:Inter,system-ui,sans-serif;background:#0b1020;color:#fff;display:flex;justify-content:center;align-items:center;height:100vh}
+    .wrap{display:flex;flex-direction:column;gap:20px;max-width:600px;width:100%;padding:20px}
+
+    .info-box{background:#111834;border:1px solid #2a3562;border-radius:16px;padding:20px;text-align:center;box-shadow:0 8px 24px #0007}
+    .info-time{font-size:40px;font-weight:700;color:#76d3ff;margin-bottom:8px}
+    .info-date{font-size:16px;color:#cfe1ff;margin:4px 0}
+
+    .next-box{background:#111834;border:1px solid #2a3562;border-radius:16px;padding:30px;text-align:center;box-shadow:0 8px 24px #0007}
+    .next-label{font-size:22px;color:#9bb2d6;margin-bottom:12px}
+    .next-time{font-size:48px;font-weight:700;color:#76d3ff}
+
+    .times-box{background:#111834;border:1px solid #2a3562;border-radius:16px;padding:20px;display:flex;justify-content:space-between;gap:10px;box-shadow:0 8px 24px #0007}
+    .prayer{flex:1;text-align:center;padding:10px;border:1px solid #2a3767;border-radius:12px;background:#0f1634}
+    .prayer.current{background:#1e2a60;border-color:#3dd1ff;color:#fff;font-weight:700}
+    .prayer-name{font-size:14px;margin-bottom:6px;color:#cfe1ff}
+    .prayer-time{font-size:18px;font-weight:600}
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/dayjs@1/locale/sq.js"></script>
+</head>
+<body>
+  <div class="wrap">
+    <div class="info-box">
+      <div class="info-time" id="currentClock">--:--</div>
+      <div class="info-date" id="weekday">—</div>
+      <div class="info-date" id="hijriDate">Hixhri: —</div>
+      <div class="info-date" id="gregDate">Gregorian: —</div>
+    </div>
+    <div class="next-box">
+      <div class="next-label" id="nextLabel">—</div>
+      <div class="next-time" id="nextTime">--</div>
+    </div>
+    <div class="times-box" id="timesBox"></div>
+  </div>
+
+  <script>
+  dayjs.locale('sq');
+  const $ = sel=>document.querySelector(sel);
+  let prayers=[];
+  let currentIndex=-1;
+
+  const hijriMonths = [
+    "Muharrem",
+    "Safer",
+    "Rebiu Evel",
+    "Rebiu Ahir",
+    "Xhumada Ula",
+    "Xhumada Ahire",
+    "Rexheb",
+    "Shaban",
+    "Ramadan",
+    "Sheval",
+    "Dhul Ka'de",
+    "Dhul Hixhe"
+  ];
+
+  const gregMonths = [
+    "Janar","Shkurt","Mars","Prill","Maj","Qershor","Korrik","Gusht","Shtator","Tetor","Nëntor","Dhjetor"
+  ];
+
+  function render(){
+    const box=$('#timesBox');box.innerHTML='';
+    prayers.forEach((p,i)=>{
+      const div=document.createElement('div');
+      div.className='prayer'+(i===currentIndex?' current':'');
+      const name=document.createElement('div');
+      name.className='prayer-name';
+      name.textContent=p.name;
+      const time=document.createElement('div');
+      time.className='prayer-time';
+      time.textContent=p.time;
+      div.appendChild(name);
+      div.appendChild(time);
+      box.appendChild(div);
+    });
+  }
+
+  function tick(){
+    if(prayers.length===0) return;
+    const now=dayjs();
+    let idx=-1;
+    for(let i=0;i<prayers.length;i++){
+      if(now.isAfter(prayers[i].at)) idx=i;
+    }
+    currentIndex=idx;
+    render();
+    const next=prayers[idx+1];
+    if(next){
+      const diff=next.at.diff(now);
+      const mins=Math.floor(diff/60000);
+      $('#nextLabel').textContent=`${next.name} hyn edhe`;
+      $('#nextTime').textContent=`${mins} min`;
+    }else{
+      $('#nextLabel').textContent='Dita ka përfunduar';
+      $('#nextTime').textContent='';
+    }
+
+    // Ora aktuale dhe datat
+    $('#currentClock').textContent=now.format('HH:mm');
+    $('#weekday').textContent=now.format('dddd');
+    $('#gregDate').textContent=`${now.date()} ${gregMonths[now.month()]} ${now.year()}`;
+  }
+
+  async function loadHijri(){
+    const today=dayjs().format('DD-MM-YYYY');
+    try{
+      const res=await fetch(`https://api.aladhan.com/v1/gToH?date=${today}`);
+      const data=await res.json();
+      if(data.data && data.data.hijri){
+        const hijri=data.data.hijri;
+        const d = hijri.day;
+        const m = parseInt(hijri.month.number,10);
+        const y = hijri.year;
+        const monthName = hijriMonths[m-1] || hijri.month.en;
+        $('#hijriDate').textContent=`${d} ${monthName} (${m}) ${y}`;
+      }
+    }catch(e){
+      console.error('Gabim në marrjen e datës Hixhri',e);
+      $('#hijriDate').textContent='—';
+    }
+  }
+
+  async function loadCsv(text){
+    const parsed=Papa.parse(text.trim());
+    const headers=parsed.data[0].map(h=>h.toLowerCase());
+    const idx={
+      day:headers.findIndex(h=>h.includes('day')),
+      month:headers.findIndex(h=>h.includes('month')),
+      fajr:headers.findIndex(h=>h.includes('fajr')||h.includes('imsak')),
+      dhuhr:headers.findIndex(h=>h.includes('dhuhr')||h.includes('zuhr')),
+      asr:headers.findIndex(h=>h.includes('asr')),
+      maghrib:headers.findIndex(h=>h.includes('maghrib')),
+      isha:headers.findIndex(h=>h.includes('isha'))
+    };
+    const today=dayjs();
+    const row=parsed.data.find((r,i)=>{
+      if(i===0) return false; // skip header
+      const d=parseInt(r[idx.day],10);
+      const m=parseInt(r[idx.month],10);
+      return d===today.date() && m===today.month()+1;
+    });
+    if(!row){alert('Nuk u gjet rreshti për sot');return;}
+    prayers=[
+      {key:'fajr', name:'Sabahu'},
+      {key:'dhuhr', name:'Dreka'},
+      {key:'asr', name:'Ikindia'},
+      {key:'maghrib', name:'Akshami'},
+      {key:'isha', name:'Jacia'}
+    ].map(item=>{
+      const col=idx[item.key];
+      const time=row[col];
+      if(!time||!time.includes(':')) return null;
+      const [h,m]=time.split(':').map(Number);
+      const at = today.startOf('day').set('hour',h).set('minute',m).set('second',0);
+      return {name:item.name,time,at};
+    }).filter(Boolean);
+    setInterval(tick,1000);tick();
+  }
+
+  // Ngarko automatikisht prayer_times.csv dhe datën Hixhri nga API
+  fetch("prayer_times.csv")
+    .then(r=>r.text())
+    .then(loadCsv)
+    .catch(err=>{
+      console.error('Ngarkimi automatik dështoi',err);
+      alert('Vendos këtë skedar HTML dhe CSV në të njëjtën dosje, pastaj shërbeje me një server lokal (p.sh. `python -m http.server`).');
+    });
+
+  loadHijri();
+  </script>
+</body>
+</html>
