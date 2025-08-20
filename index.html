@@ -6,22 +6,57 @@
   <title>Kohët e Namazit</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
-    body{margin:0;font-family:Inter,system-ui,sans-serif;background:#0b1020;color:#fff;display:flex;justify-content:center;align-items:center;height:100vh}
-    .wrap{display:flex;flex-direction:column;gap:20px;max-width:600px;width:100%;padding:20px}
+    body{
+      margin:0;
+      font-family:Inter,system-ui,sans-serif;
+      background-size:cover;
+      background-position:center;
+      background-repeat:no-repeat;
+      color:#fff;
+      display:flex;
+      justify-content:center;
+      align-items:stretch;
+      height:100vh
+    }
+    .wrap{
+      display:grid;
+      grid-template-columns:0.2fr 1fr 1fr; /* left box narrower */
+      gap:20px;
+      width:100%;
+      padding:20px;
+    }
 
-    .info-box{background:#111834;border:1px solid #2a3562;border-radius:16px;padding:20px;text-align:center;box-shadow:0 8px 24px #0007}
-    .info-time{font-size:40px;font-weight:700;color:#76d3ff;margin-bottom:8px}
-    .info-date{font-size:16px;color:#cfe1ff;margin:4px 0}
+    .box{
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 24px;
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+      backdrop-filter: blur(20px) saturate(150%);
+      -webkit-backdrop-filter: blur(20px) saturate(150%);
+      padding:20px;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:flex-start;
+      overflow:auto;
+    }
 
-    .next-box{background:#111834;border:1px solid #2a3562;border-radius:16px;padding:30px;text-align:center;box-shadow:0 8px 24px #0007}
-    .next-label{font-size:22px;color:#9bb2d6;margin-bottom:12px}
-    .next-time{font-size:48px;font-weight:700;color:#76d3ff}
+    .info-time{font-size:40px;font-weight:700;color:#fff;margin-bottom:8px;letter-spacing:2px}
+    .info-time .colon{animation:pulse 1s infinite;}
+    @keyframes pulse{0%,100%{opacity:1}50%{opacity:0}}
 
-    .times-box{background:#111834;border:1px solid #2a3562;border-radius:16px;padding:20px;display:flex;justify-content:space-between;gap:10px;box-shadow:0 8px 24px #0007}
-    .prayer{flex:1;text-align:center;padding:10px;border:1px solid #2a3767;border-radius:12px;background:#0f1634}
-    .prayer.current{background:#1e2a60;border-color:#3dd1ff;color:#fff;font-weight:700}
+    .info-date{font-size:16px;color:#fff;margin:4px 0}
+
+    .next-label{font-size:22px;color:#fff;margin-bottom:12px}
+    .next-time{font-size:48px;font-weight:700;color:#fff}
+
+    .times-box{display:flex;flex-direction:column;gap:10px;width:100%}
+    .prayer{text-align:center;padding:10px;border:none;background:transparent;display:flex;flex-direction:column;justify-content:center}
     .prayer-name{font-size:14px;margin-bottom:6px;color:#cfe1ff}
-    .prayer-time{font-size:18px;font-weight:600}
+    .prayer-time{font-size:18px;font-weight:600;color:#cfe1ff}
+
+    .quotes-box{font-size:18px;line-height:1.6;text-align:center;color:#fff}
+    .quotes-box h2{margin-bottom:10px;font-size:20px;color:#76d3ff}
   </style>
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
@@ -29,17 +64,28 @@
 </head>
 <body>
   <div class="wrap">
-    <div class="info-box">
+    <!-- Left Column: Prayer Times -->
+    <div class="box">
       <div class="info-time" id="currentClock">--:--</div>
       <div class="info-date" id="weekday">—</div>
       <div class="info-date" id="hijriDate">Hixhri: —</div>
       <div class="info-date" id="gregDate">Gregorian: —</div>
-    </div>
-    <div class="next-box">
       <div class="next-label" id="nextLabel">—</div>
       <div class="next-time" id="nextTime">--</div>
+      <div class="times-box" id="timesBox"></div>
     </div>
-    <div class="times-box" id="timesBox"></div>
+
+    <!-- Middle Column: Albanian Quotes -->
+    <div class="box quotes-box">
+      <h2>Thënie në shqip</h2>
+      <div id="quotesSq">“Mos e humb shpresën, edhe pas natës më të errët lind dielli.”</div>
+    </div>
+
+    <!-- Right Column: Arabic Quotes -->
+    <div class="box quotes-box">
+      <h2>اقتباسات بالعربية</h2>
+      <div id="quotesAr">“وَمَا تَوْفِيقِي إِلَّا بِاللَّهِ”</div>
+    </div>
   </div>
 
   <script>
@@ -49,29 +95,24 @@
   let currentIndex=-1;
 
   const hijriMonths = [
-    "Muharrem",
-    "Safer",
-    "Rebiu Evel",
-    "Rebiu Ahir",
-    "Xhumada Ula",
-    "Xhumada Ahire",
-    "Rexheb",
-    "Shaban",
-    "Ramadan",
-    "Sheval",
-    "Dhul Ka'de",
-    "Dhul Hixhe"
+    "Muharrem","Safer","Rebiu Evel","Rebiu Ahir","Xhumada Ula","Xhumada Ahire","Rexheb","Shaban","Ramadan","Sheval","Dhul Ka'de","Dhul Hixhe"
   ];
 
-  const gregMonths = [
-    "Janar","Shkurt","Mars","Prill","Maj","Qershor","Korrik","Gusht","Shtator","Tetor","Nëntor","Dhjetor"
+  const gregMonths = ["Janar","Shkurt","Mars","Prill","Maj","Qershor","Korrik","Gusht","Shtator","Tetor","Nëntor","Dhjetor"];
+
+  const backgrounds = [
+    'https://images.unsplash.com/photo-1503264116251-35a269479413?auto=format&fit=crop&w=1950&q=80',
+    'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1950&q=80',
+    'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1950&q=80',
+    'https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=1950&q=80'
   ];
+  document.body.style.backgroundImage=`url('${backgrounds[Math.floor(Math.random()*backgrounds.length)]}')`;
 
   function render(){
     const box=$('#timesBox');box.innerHTML='';
-    prayers.forEach((p,i)=>{
+    prayers.forEach((p)=>{
       const div=document.createElement('div');
-      div.className='prayer'+(i===currentIndex?' current':'');
+      div.className='prayer';
       const name=document.createElement('div');
       name.className='prayer-name';
       name.textContent=p.name;
@@ -82,6 +123,12 @@
       div.appendChild(time);
       box.appendChild(div);
     });
+  }
+
+  function formatClock(now){
+    const h=now.format('HH');
+    const m=now.format('mm');
+    return `${h}<span class="colon">:</span>${m}`;
   }
 
   function tick(){
@@ -97,15 +144,21 @@
     if(next){
       const diff=next.at.diff(now);
       const mins=Math.floor(diff/60000);
-      $('#nextLabel').textContent=`${next.name} hyn edhe`;
-      $('#nextTime').textContent=`${mins} min`;
+      if(mins > 59){
+        const hours=Math.floor(mins/60);
+        const remMins=mins%60;
+        $('#nextLabel').textContent=`${next.name} edhe`;
+        $('#nextTime').textContent=`${hours} orë e ${remMins.toString().padStart(2,'0')} min`;
+      } else {
+        $('#nextLabel').textContent=`${next.name} edhe`;
+        $('#nextTime').textContent=`${mins} min`;
+      }
     }else{
       $('#nextLabel').textContent='Dita ka përfunduar';
       $('#nextTime').textContent='';
     }
 
-    // Ora aktuale dhe datat
-    $('#currentClock').textContent=now.format('HH:mm');
+    $('#currentClock').innerHTML=formatClock(now);
     $('#weekday').textContent=now.format('dddd');
     $('#gregDate').textContent=`${now.date()} ${gregMonths[now.month()]} ${now.year()}`;
   }
@@ -143,7 +196,7 @@
     };
     const today=dayjs();
     const row=parsed.data.find((r,i)=>{
-      if(i===0) return false; // skip header
+      if(i===0) return false;
       const d=parseInt(r[idx.day],10);
       const m=parseInt(r[idx.month],10);
       return d===today.date() && m===today.month()+1;
@@ -166,13 +219,12 @@
     setInterval(tick,1000);tick();
   }
 
-  // Ngarko automatikisht prayer_times.csv dhe datën Hixhri nga API
   fetch("prayer_times.csv")
     .then(r=>r.text())
     .then(loadCsv)
     .catch(err=>{
       console.error('Ngarkimi automatik dështoi',err);
-      alert('Vendos këtë skedar HTML dhe CSV në të njëjtën dosje, pastaj shërbeje me një server lokal (p.sh. `python -m http.server`).');
+      alert('Vendos këtë skedar HTML dhe CSV në të njëjtën dosje, pastaj shërbeje me një server lokal.');
     });
 
   loadHijri();
