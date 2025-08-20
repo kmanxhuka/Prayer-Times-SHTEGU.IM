@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="sq">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Kohët e Namazit</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <!-- Left: Prayer times -->
+    <div class="box">
+      <div class="info-time" id="currentClock">--:--</div>
+      <div class="info-date" id="weekday">—</div>
+      <div class="info-date" id="hijriDate">—</div>
+      <div class="info-date" id="gregDate">—</div>
+
+      <div class="next-label" id="nextLabel">—</div>
+      <div class="next-time" id="nextTime">--</div>
+
+      <div class="times-box" id="timesBox"></div>
+    </div>
+
+<!-- Middle: Albanian quotes -->
+<div class="box quote-box">
+  <div id="quotesSq">—</div>
+  <div class="progress"><div id="progressSq"></div></div>
+</div>
+
+<!-- Right: Arabic quotes -->
+<div class="box quote-box">
+  <div id="quotesAr">—</div>
+  <div class="progress"><div id="progressAr"></div></div>
+</div>
+
+
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/dayjs@1/locale/sq.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
