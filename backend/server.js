@@ -2,6 +2,8 @@ import express from "express";
 import sqlite3 from "sqlite3";
 import { Telegraf } from "telegraf";
 import dotenv from "dotenv";
+import path from "path";
+import { fileURLToPath } from "url";
 
 dotenv.config();
 const app = express();
@@ -38,15 +40,12 @@ function entitiesToHTML(text, entities = []) {
         break;
     }
 
-    // Opening tags inserted with order=1, closing tags with order=0
     inserts.push({ pos: ent.offset, tag: openTag, order: 1 });
     inserts.push({ pos: ent.offset + ent.length, tag: closeTag, order: 0 });
   }
 
-  // Sort by position (descending), then by order (closing before opening)
   inserts.sort((a, b) => b.pos - a.pos || a.order - b.order);
 
-  // Insert tags backwards so offsets remain valid
   let result = text;
   for (const ins of inserts) {
     result = result.slice(0, ins.pos) + ins.tag + result.slice(ins.pos);
@@ -64,7 +63,6 @@ bot.on("channel_post", (ctx) => {
   const msg = ctx.channelPost;
   if (!msg || !msg.text) return;
 
-  // ✅ Convert text + entities into HTML safely
   const htmlText = entitiesToHTML(msg.text, msg.entities);
 
   let table;
@@ -97,12 +95,13 @@ app.get("/api/quotes-ar", (req, res) => {
   });
 });
 
-// --- Serve frontend ---
-app.use(express.static("../frontend"));
+// --- Serve frontend (works on Render) ---
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+app.use(express.static(path.join(__dirname, "../frontend")));
 
 // --- Start server ---
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
+app.listen(PORT, "0.0.0.0", () => {
   console.log(`✅ Server running on http://localhost:${PORT}`);
 });
 
