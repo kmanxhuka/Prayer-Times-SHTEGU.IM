@@ -1,7 +1,6 @@
 {
   "name": "prayer-times-shtegu",
   "version": "1.0.0",
-  "description": "Prayer times and quotes app (backend + frontend)",
   "main": "backend/server.js",
   "type": "module",
   "scripts": {
