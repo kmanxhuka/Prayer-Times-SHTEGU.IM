@@ -15,9 +15,12 @@ const gregMonths = [
 function render() {
   const box = $('#timesBox'); 
   box.innerHTML = '';
-  prayers.forEach(p => {
+  prayers.forEach((p, i) => {
     const div = document.createElement('div');
     div.className = 'prayer';
+    if (i === currentIndex) {
+      div.classList.add('active'); // highlight current prayer
+    }
     div.innerHTML = `<div class="prayer-name">${p.name}</div><div class="prayer-time">${p.time}</div>`;
     box.appendChild(div);
   });
@@ -33,7 +36,19 @@ function tick() {
   currentIndex = idx;
   render();
 
-  const next = prayers[idx + 1];
+  let next = prayers[idx + 1];
+
+  // ✅ if no next prayer (after Isha), use tomorrow's Fajr
+  if (!next && prayers.length > 0) {
+    const tomorrow = dayjs().add(1, 'day').startOf('day');
+    const fajr = prayers[0];
+    if (fajr) {
+      const [h, m] = fajr.time.split(':').map(Number);
+      const fajrAt = tomorrow.set('hour', h).set('minute', m).set('second', 0);
+      next = { ...fajr, at: fajrAt };
+    }
+  }
+
   if (next) {
     const diff = next.at.diff(now);
     const mins = Math.floor(diff / 60000);
@@ -46,7 +61,7 @@ function tick() {
     }
     $('#nextLabel').textContent = `${next.name} edhe`;
   } else {
-    $('#nextLabel').textContent = 'Dita ka përfunduar';
+    $('#nextLabel').textContent = '—';
     $('#nextTime').textContent = '';
   }
 

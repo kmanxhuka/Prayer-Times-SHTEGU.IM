@@ -2,7 +2,7 @@
 .quote-title {
   font-family: "Montserrat", sans-serif;
   font-weight: 700;
-  font-size: 20px;
+  font-size: clamp(16px, 2vw, 22px); /* responsive */
   margin-bottom: 12px;
   color: #76d3ff;
 }
@@ -10,7 +10,7 @@
 /* Albanian text */
 #quotesSq {
   font-family: "Aref Ruqaa", serif;
-  font-size: 20px;
+  font-size: clamp(18px, 2.5vw, 28px); /* responsive size */
   line-height: 1.6;
   white-space: pre-line;
 }
