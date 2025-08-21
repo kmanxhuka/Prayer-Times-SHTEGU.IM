@@ -8,6 +8,7 @@
   #max-height: 32px;
   font-family: "Montserrat", sans-serif;
   color: #76d3ff;
+  max-height: 10vh;
   
   line-height: 0.1;  /* tighter vertical alignment */
 }
