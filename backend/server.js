@@ -1,13 +1,26 @@
-// server.js
+// backend/server.js
 import express from "express";
 import { Telegraf } from "telegraf";
 import dotenv from "dotenv";
 import pkg from "pg";
+import path from "path";
+import { fileURLToPath } from "url";
 
 dotenv.config();
 const { Pool } = pkg;
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 const app = express();
+
+// --- Serve frontend (always point to ../frontend) ---
+const frontendPath = path.join(__dirname, "../frontend");
+app.use(express.static(frontendPath));
+
+app.get("/", (req, res) => {
+  res.sendFile(path.join(frontendPath, "index.html"));
+});
 
 // --- Connect to Postgres ---
 const pool = new Pool({
