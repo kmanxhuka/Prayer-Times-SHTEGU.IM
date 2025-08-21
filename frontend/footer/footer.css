@@ -1,0 +1,15 @@
+.footer {
+  font-family: "Montserrat", sans-serif;
+  font-size: 22px;
+  font-weight: 600;
+  color: #76d3ff;
+
+  /* Center clock inside */
+  display: flex;
+  justify-content: center; /* horizontal center */
+  align-items: center;     /* vertical center */
+
+  padding: 12px;
+  margin: 0px 0 0;
+  grid-column: 1 / -1; /* span across all columns */
+}

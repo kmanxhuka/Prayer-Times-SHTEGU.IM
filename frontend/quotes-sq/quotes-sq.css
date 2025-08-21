@@ -1,0 +1,16 @@
+/* Title for Albanian quotes */
+.quote-title {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 700;
+  font-size: 20px;
+  margin-bottom: 12px;
+  color: #76d3ff;
+}
+
+/* Albanian text */
+#quotesSq {
+  font-family: "Aref Ruqaa", serif;
+  font-size: 20px;
+  line-height: 1.6;
+  white-space: pre-line;
+}

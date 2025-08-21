@@ -4,8 +4,17 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Kohët e Namazit</title>
+
+  <!-- Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Aref+Ruqaa:wght@400;700&family=Montserrat:wght@100..900&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
+
+  <!-- Global CSS -->
+  <link rel="stylesheet" href="shared.css">
+  <!-- Section CSS -->
+  <link rel="stylesheet" href="prayer/prayer.css">
+  <link rel="stylesheet" href="quotes-sq/quotes-sq.css">
+  <link rel="stylesheet" href="quotes-ar/quotes-ar.css">
+  <link rel="stylesheet" href="footer/footer.css"> <!-- ✅ new -->
 </head>
 <body>
   <div class="container">
@@ -22,22 +31,35 @@
       <div class="times-box" id="timesBox"></div>
     </div>
 
-<!-- Middle: Albanian quotes -->
-<div class="box quote-box">
-  <div id="quotesSq">—</div>
-  <div class="progress"><div id="progressSq"></div></div>
-</div>
+    <!-- Middle: Albanian quotes -->
+    <div class="box quote-box">
+      <div id="quotesSq">—</div>
+      <div class="progress"><div id="progressSq"></div></div>
+    </div>
 
-<!-- Right: Arabic quotes -->
-<div class="box quote-box">
-  <div id="quotesAr">—</div>
-  <div class="progress"><div id="progressAr"></div></div>
-</div>
+    <!-- Right: Arabic quotes -->
+    <div class="box quote-box">
+      <div id="quotesAr">—</div>
+      <div class="progress"><div id="progressAr"></div></div>
+    </div>
 
+    <!-- Footer Section -->
+    <div class="footer box">
+      <div id="footerClock">--:--:--</div>
+    </div>
+  </div>
 
+  
+
+  <!-- Libraries -->
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/dayjs@1/locale/sq.js"></script>
-  <script src="app.js"></script>
+
+  <!-- Section Scripts -->
+  <script src="prayer/prayer.js"></script>
+  <script src="quotes-sq/quotes-sq.js"></script>
+  <script src="quotes-ar/quotes-ar.js"></script>
+  <script src="footer/footer.js"></script> <!-- ✅ new -->
 </body>
 </html>
