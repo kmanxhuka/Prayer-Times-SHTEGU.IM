@@ -1,15 +1,31 @@
 .footer {
+  display: flex;                 /* use flexbox */
+  justify-content: center;       /* center content horizontally */
+  align-items: center;           /* center content vertically */
+
+  padding: 0 !important;             /* small padding for slim height */
+  grid-column: 1 / -1;           /* span full width across grid */
+  #max-height: 32px;
   font-family: "Montserrat", sans-serif;
-  font-size: 22px;
-  font-weight: 600;
   color: #76d3ff;
+  
+  line-height: 0.1;  /* tighter vertical alignment */
+}
 
-  /* Center clock inside */
+/* Next prayer info */
+.footer-right {
   display: flex;
-  justify-content: center; /* horizontal center */
-  align-items: center;     /* vertical center */
+  gap: 8px;                      /* space between label and time */
+  align-items: baseline;         /* align numbers nicely */
+}
 
-  padding: 12px;
-  margin: 0px 0 0;
-  grid-column: 1 / -1; /* span across all columns */
+.next-label {
+  font-size: 16px;
+  color: #cfe1ff;
+}
+
+.next-time {
+  font-size: 18px;
+  font-weight: 700;
+  color: #1ee3ae;
 }
