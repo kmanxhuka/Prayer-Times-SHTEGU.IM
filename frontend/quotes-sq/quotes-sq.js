@@ -1,22 +1,46 @@
 let refreshIntervalSq = 60;
 let remainingSq = refreshIntervalSq;
 
+// === Helper: auto-fit font size (shrink only, robust) ===
+function fitQuoteFont(quoteEl, baseSize = 22, minSize = 12) {
+  const parent = quoteEl.parentElement;
+
+  // reset to base font size every time
+  let fontSize = baseSize;
+  quoteEl.style.fontSize = fontSize + "px";
+
+  // shrink until it fits inside parent
+  while (quoteEl.scrollHeight > parent.clientHeight && fontSize > minSize) {
+    fontSize -= 1;
+    quoteEl.style.fontSize = fontSize + "px";
+  }
+}
+
 async function loadQuoteSq() {
   const sq = await fetch("/api/quotes-sq").then(r => r.json());
   if (sq.quote) {
     const parts = sq.quote.trim().split("\n");
     const title = parts.pop();
     const body = parts.join("\n");
-    document.getElementById("quotesSq").innerHTML = body;
-    quoteTitleSq.textContent = title;
-    refreshIntervalSq = Math.min(120, Math.max(20, body.length * 1.2 / 10));
+
+    const quoteEl = document.getElementById("quotesSq");
+    const quoteTitleEl = document.getElementById("quoteTitleSq");
+
+    // update content
+    quoteEl.innerHTML = body;
+    quoteTitleEl.textContent = title;
+
+    // auto-fit font size
+    fitQuoteFont(quoteEl, 22, 12);
+
+    // update refresh interval
+    refreshIntervalSq = Math.min(90, Math.max(5, body.length * 1.2 / 20));
     remainingSq = refreshIntervalSq;
     progressSq.style.width = "100%";
   }
 }
 
 const progressSq = document.getElementById("progressSq");
-const quoteTitleSq = document.getElementById("quoteTitleSq");
 
 function updateProgressSq() {
   if (remainingSq > 0) remainingSq -= 0.1;
