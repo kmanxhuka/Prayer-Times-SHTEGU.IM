@@ -11,7 +11,7 @@ async function loadQuoteAr() {
     quoteTitleAr.textContent = title;
     refreshIntervalAr = Math.min(120, Math.max(20, body.length * 1.2 / 10));
     remainingAr = refreshIntervalAr;
-    progressAr.style.width = "100%";
+    progressAr.style.transform = "scaleX(1)"; // ✅ reset full bar
   }
 }
 
@@ -21,7 +21,7 @@ const quoteTitleAr = document.getElementById("quoteTitleAr");
 function updateProgressAr() {
   if (remainingAr > 0) remainingAr -= 0.1;
   const percent = (remainingAr / refreshIntervalAr * 100);
-  progressAr.style.width = percent + "%";
+  progressAr.style.transform = `scaleX(${percent / 100})`; // ✅ smooth shrink
   if (remainingAr <= 0) loadQuoteAr();
 }
 
