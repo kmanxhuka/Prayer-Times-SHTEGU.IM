@@ -108,9 +108,6 @@ app.get("/api/quotes-ar", async (req, res) => {
   }
 });
 
-// --- Serve frontend ---
-app.use(express.static("../frontend"));
-
 // --- Start server ---
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
