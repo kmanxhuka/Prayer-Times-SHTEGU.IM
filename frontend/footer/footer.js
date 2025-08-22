@@ -1,6 +1,9 @@
 function updateFooterClock() {
-  const now = dayjs().format("HH:mm:ss");
-  document.getElementById("footerClock").textContent = now;
+  const clock = document.getElementById("footerClock");
+  if (!clock) {
+    return;
+  }
+  clock.textContent = dayjs().format("HH:mm:ss");
 }
 
 setInterval(updateFooterClock, 1000);
