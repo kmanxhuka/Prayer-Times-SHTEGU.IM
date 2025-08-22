@@ -7,15 +7,16 @@ async function loadQuoteSq() {
     document.getElementById("quotesSq").innerHTML = sq.quote;
     refreshIntervalSq = Math.min(120, Math.max(20, sq.quote.length * 1.2 / 10));
     remainingSq = refreshIntervalSq;
+    progressSq.style.width = "100%";
   }
 }
 
-const boxSq = document.getElementById("quoteBoxSq");
+const progressSq = document.getElementById("progressSq");
 
 function updateProgressSq() {
   if (remainingSq > 0) remainingSq -= 0.1;
   const percent = (remainingSq / refreshIntervalSq * 100);
-  boxSq.style.setProperty("--progress", percent + "%");
+  progressSq.style.width = percent + "%";
   if (remainingSq <= 0) loadQuoteSq();
 }
 
