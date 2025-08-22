@@ -5,14 +5,27 @@ import dotenv from "dotenv";
 import pkg from "pg";
 import path from "path";
 import { fileURLToPath } from "url";
-
-dotenv.config();
-const { Pool } = pkg;
+import { parse } from "pg-connection-string";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+// ✅ Always load .env from backend folder
+dotenv.config({ path: path.join(__dirname, ".env") });
+
+const { Pool } = pkg;
 const app = express();
+
+// Debug: check environment variables in dev
+if (process.env.NODE_ENV !== "production") {
+  if (!process.env.DATABASE_URL) {
+    console.error("❌ Missing DATABASE_URL in .env");
+    process.exit(1);
+  }
+  const parsed = parse(process.env.DATABASE_URL);
+  console.log("Parsed DB config:", parsed);
+  console.log("BOT_TOKEN =", process.env.BOT_TOKEN ? "✅ loaded" : "❌ missing");
+}
 
 // --- Serve frontend (always point to ../frontend) ---
 const frontendPath = path.join(__dirname, "../frontend");
@@ -25,7 +38,9 @@ app.get("/", (req, res) => {
 // --- Connect to Postgres ---
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
-  ssl: { rejectUnauthorized: false } // Render Postgres requires SSL
+  ssl: process.env.NODE_ENV === "production"
+    ? { rejectUnauthorized: false } // Render requires SSL
+    : false                         // Local Postgres doesn’t use SSL
 });
 
 // --- DB setup ---
@@ -41,48 +56,57 @@ async function initDb() {
 }
 initDb().catch(err => console.error("❌ DB init failed:", err));
 
+// --- Helper: convert Telegram entities into proper nested HTML ---
+function entitiesToHTML(text, entities = []) {
+  if (!entities || entities.length === 0) return text;
+
+  const inserts = [];
+  for (const ent of entities) {
+    let openTag = "", closeTag = "";
+
+    switch (ent.type) {
+      case "bold": openTag = "<b>"; closeTag = "</b>"; break;
+      case "italic": openTag = "<i>"; closeTag = "</i>"; break;
+      case "underline": openTag = "<u>"; closeTag = "</u>"; break;
+      case "strikethrough": openTag = "<s>"; closeTag = "</s>"; break;
+      case "code": openTag = "<code>"; closeTag = "</code>"; break;
+      case "pre": openTag = "<pre>"; closeTag = "</pre>"; break;
+      case "text_link":
+        openTag = `<a href="${ent.url}" target="_blank">`;
+        closeTag = "</a>";
+        break;
+      case "text_mention":
+        openTag = `<a href="tg://user?id=${ent.user.id}">`;
+        closeTag = "</a>";
+        break;
+    }
+
+    inserts.push({ pos: ent.offset, tag: openTag, order: 1 });
+    inserts.push({ pos: ent.offset + ent.length, tag: closeTag, order: 0 });
+  }
+
+  // Sort: descending pos, closing tags first at same position
+  inserts.sort((a, b) => b.pos - a.pos || a.order - b.order);
+
+  // Insert backwards so offsets remain valid
+  let result = text;
+  for (const ins of inserts) {
+    result = result.slice(0, ins.pos) + ins.tag + result.slice(ins.pos);
+  }
+
+  return result;
+}
+
 // --- Telegram Bot ---
 const bot = new Telegraf(process.env.BOT_TOKEN);
 const CHANNEL_ID_SQ = process.env.CHANNEL_SQ;
 const CHANNEL_ID_AR = process.env.CHANNEL_AR;
 
-// Helper: convert Telegram entities to HTML
-function formatMessageWithEntities(text, entities = []) {
-  if (!entities || entities.length === 0) return text;
-
-  let result = "";
-  let cursor = 0;
-
-  for (const ent of entities) {
-    const before = text.slice(cursor, ent.offset);
-    result += before;
-
-    const part = text.substr(ent.offset, ent.length);
-
-    switch (ent.type) {
-      case "bold": result += `<b>${part}</b>`; break;
-      case "italic": result += `<i>${part}</i>`; break;
-      case "underline": result += `<u>${part}</u>`; break;
-      case "strikethrough": result += `<s>${part}</s>`; break;
-      case "code": result += `<code>${part}</code>`; break;
-      case "pre": result += `<pre>${part}</pre>`; break;
-      case "text_link": result += `<a href="${ent.url}" target="_blank">${part}</a>`; break;
-      case "text_mention": result += `<a href="tg://user?id=${ent.user.id}">${part}</a>`; break;
-      default: result += part;
-    }
-
-    cursor = ent.offset + ent.length;
-  }
-  result += text.slice(cursor);
-  return result;
-}
-
-// Handle incoming channel/group messages
-bot.on(["message", "channel_post"], async (ctx) => {
-  const msg = ctx.message || ctx.channelPost;
+bot.on("channel_post", async (ctx) => {
+  const msg = ctx.channelPost;
   if (!msg || !msg.text) return;
 
-  const htmlText = formatMessageWithEntities(msg.text, msg.entities);
+  const htmlText = entitiesToHTML(msg.text, msg.entities);
 
   let table;
   if (msg.chat.id.toString() === CHANNEL_ID_SQ) {
@@ -90,7 +114,7 @@ bot.on(["message", "channel_post"], async (ctx) => {
   } else if (msg.chat.id.toString() === CHANNEL_ID_AR) {
     table = "quotes_ar";
   } else {
-    return; // ignore unknown sources
+    return; // ignore messages from other channels
   }
 
   try {

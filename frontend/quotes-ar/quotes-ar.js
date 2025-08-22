@@ -10,10 +10,12 @@ async function loadQuoteAr() {
   }
 }
 
+const boxAr = document.getElementById("quoteBoxAr");
+
 function updateProgressAr() {
   if (remainingAr > 0) remainingAr -= 0.1;
-  document.getElementById("progressAr").style.width =
-    (remainingAr / refreshIntervalAr * 100) + "%";
+  const percent = (remainingAr / refreshIntervalAr * 100);
+  boxAr.style.setProperty("--progress", percent + "%");
   if (remainingAr <= 0) loadQuoteAr();
 }
 

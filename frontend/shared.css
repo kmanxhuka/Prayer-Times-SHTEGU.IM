@@ -36,19 +36,28 @@ body {
 .quote-box {
   justify-content: center;
   text-align: center;
+  padding: 1vh 5vw;
 }
 
-.progress {
-  width: 100%;
-  height: 8px;
-  background: rgba(255,255,255,0.2);
-  border-radius: 999px;
-  margin-top: 16px;
-  overflow: hidden;
+/* Progress border around quote box */
+.quote-box {
+  position: relative; /* important so ::before stays on it */
 }
-.progress > div {
-  height: 100%;
-  background: linear-gradient(90deg,#1ee3ae,#5dd1ff);
-  width: 100%;
-  transition: width 0.2s linear;
+
+.quote-box::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 24px; /* match .box radius */
+  padding: 3px; /* thickness of the progress border */
+  background: conic-gradient(
+    #76d3ff var(--progress, 0%),
+    transparent var(--progress, 0%)
+  );
+  -webkit-mask: 
+    linear-gradient(#000 0 0) content-box, 
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
 }

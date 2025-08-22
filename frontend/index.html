@@ -14,7 +14,7 @@
   <link rel="stylesheet" href="prayer/prayer.css">
   <link rel="stylesheet" href="quotes-sq/quotes-sq.css">
   <link rel="stylesheet" href="quotes-ar/quotes-ar.css">
-  <link rel="stylesheet" href="footer/footer.css"> <!-- ✅ new -->
+  <link rel="stylesheet" href="footer/footer.css">
 </head>
 <body>
   <div class="container">
@@ -29,27 +29,23 @@
     </div>
 
     <!-- Middle: Albanian quotes -->
-    <div class="box quote-box">
+    <div class="box quote-box" id="quoteBoxSq">
       <div id="quotesSq">—</div>
-      <div class="progress"><div id="progressSq"></div></div>
     </div>
 
     <!-- Right: Arabic quotes -->
-    <div class="box quote-box">
+    <div class="box quote-box" id="quoteBoxAr">
       <div id="quotesAr">—</div>
-      <div class="progress"><div id="progressAr"></div></div>
     </div>
 
     <!-- Footer Section -->
-<div class="footer box">
-  <div class="footer-right" id="footerNext">
-    <span class="next-label" id="nextLabel">—</span>
-    <span class="next-time" id="nextTime">--</span>
+    <div class="footer box">
+      <div class="footer-right" id="footerNext">
+        <span class="next-label" id="nextLabel">—</span>
+        <span class="next-time" id="nextTime">--</span>
+      </div>
+    </div>
   </div>
-</div>
-  </div>
-
-  
 
   <!-- Libraries -->
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
@@ -60,6 +56,6 @@
   <script src="prayer/prayer.js"></script>
   <script src="quotes-sq/quotes-sq.js"></script>
   <script src="quotes-ar/quotes-ar.js"></script>
-  <script src="footer/footer.js"></script> <!-- ✅ new -->
+  <script src="footer/footer.js"></script>
 </body>
 </html>
