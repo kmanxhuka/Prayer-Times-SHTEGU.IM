@@ -36,7 +36,7 @@ async function loadQuoteSq() {
     // update refresh interval
     refreshIntervalSq = Math.min(90, Math.max(5, body.length * 1.2 / 20));
     remainingSq = refreshIntervalSq;
-    progressSq.style.width = "100%";
+    progressSq.style.transform = "scaleX(1)"; // ✅ reset full bar
   }
 }
 
@@ -45,7 +45,7 @@ const progressSq = document.getElementById("progressSq");
 function updateProgressSq() {
   if (remainingSq > 0) remainingSq -= 0.1;
   const percent = (remainingSq / refreshIntervalSq * 100);
-  progressSq.style.width = percent + "%";
+  progressSq.style.transform = `scaleX(${percent / 100})`; // ✅ smooth shrink
   if (remainingSq <= 0) loadQuoteSq();
 }
 
