@@ -75,7 +75,10 @@ body {
 /* The filling bar */
 .middle-box .progress-bar {
   height: 100%;
-  width: 0%;             /* controlled by JS */
+  width: 100%;
+  transform-origin: left center;
+  transition: transform 0.3s linear;
+  will-change: transform;
   background: linear-gradient(90deg, #f4cb17, #faf0a3);
   border-radius: inherit;
 }
@@ -110,7 +113,10 @@ body {
 
 .right-box .progress-bar {
   height: 100%;
-  width: 0%; /* JS will control */
+  width: 100%;
+  transform-origin: left center;
+  transition: transform 0.3s linear;
+  will-change: transform;
   background: linear-gradient(90deg, #f4cb17, #faf0a3);
   border-radius: inherit;
 }
