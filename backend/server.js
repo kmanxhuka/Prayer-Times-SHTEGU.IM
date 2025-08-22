@@ -6,6 +6,7 @@ import pkg from "pg";
 import path from "path";
 import { fileURLToPath } from "url";
 import { parse } from "pg-connection-string";
+import { entitiesToHTML } from "./entitiesToHTML.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -55,47 +56,6 @@ async function initDb() {
   )`);
 }
 initDb().catch(err => console.error("❌ DB init failed:", err));
-
-// --- Helper: convert Telegram entities into proper nested HTML ---
-function entitiesToHTML(text, entities = []) {
-  if (!entities || entities.length === 0) return text;
-
-  const inserts = [];
-  for (const ent of entities) {
-    let openTag = "", closeTag = "";
-
-    switch (ent.type) {
-      case "bold": openTag = "<b>"; closeTag = "</b>"; break;
-      case "italic": openTag = "<i>"; closeTag = "</i>"; break;
-      case "underline": openTag = "<u>"; closeTag = "</u>"; break;
-      case "strikethrough": openTag = "<s>"; closeTag = "</s>"; break;
-      case "code": openTag = "<code>"; closeTag = "</code>"; break;
-      case "pre": openTag = "<pre>"; closeTag = "</pre>"; break;
-      case "text_link":
-        openTag = `<a href="${ent.url}" target="_blank">`;
-        closeTag = "</a>";
-        break;
-      case "text_mention":
-        openTag = `<a href="tg://user?id=${ent.user.id}">`;
-        closeTag = "</a>";
-        break;
-    }
-
-    inserts.push({ pos: ent.offset, tag: openTag, order: 1 });
-    inserts.push({ pos: ent.offset + ent.length, tag: closeTag, order: 0 });
-  }
-
-  // Sort: descending pos, closing tags first at same position
-  inserts.sort((a, b) => b.pos - a.pos || a.order - b.order);
-
-  // Insert backwards so offsets remain valid
-  let result = text;
-  for (const ins of inserts) {
-    result = result.slice(0, ins.pos) + ins.tag + result.slice(ins.pos);
-  }
-
-  return result;
-}
 
 // --- Telegram Bot ---
 const bot = new Telegraf(process.env.BOT_TOKEN);
