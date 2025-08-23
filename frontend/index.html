@@ -18,43 +18,35 @@
 </head>
 <body>
   <div class="container">
-    <!-- Left: Prayer times -->
-    <div class="box">
+    <!-- Left: Albanian quotes (full height) -->
+    <div class="box" id="boxQuotesSq">
+      <div class="quote-box" id="quoteBoxSq">
+        <div class="quote-title" id="quoteTitleSq"></div>
+        <div id="quotesSq">—</div>
+      </div>
+      <div class="progress"><div class="progress-bar" id="progressSq"></div></div>
+    </div>
+
+    <!-- Top-right: Arabic quotes -->
+    <div class="box" id="boxQuotesAr">
+      <div class="quote-box" id="quoteBoxAr">
+        <div class="quote-title" id="quoteTitleAr"></div>
+        <div id="quotesAr">—</div>
+      </div>
+      <div class="progress"><div class="progress-bar" id="progressAr"></div></div>
+    </div>
+
+    <!-- Top-right: Prayer times -->
+    <div class="box" id="boxPrayer">
       <div class="info-time" id="currentClock">--:--</div>
       <div class="info-date" id="weekday">—</div>
       <div class="info-date" id="hijriDate">—</div>
       <div class="info-date" id="gregDate">—</div>
-
       <div class="times-box" id="timesBox"></div>
     </div>
 
-    <!-- Middle: Albanian quotes + progress -->
-<div class="middle-box">
-  <div class="box">
-    <div class="quote-box" id="quoteBoxSq">
-      <div class="quote-title" id="quoteTitleSq"></div>
-      <div id="quotesSq">—</div>
-    </div>
-  </div>
-  <div class="progress"><div class="progress-bar" id="progressSq"></div></div>
-</div>
-
-
-<!-- Right: Arabic quotes + progress -->
-<div class="right-box">
-  <div class="box">
-    <div class="quote-box" id="quoteBoxAr">
-      <div class="quote-title" id="quoteTitleAr"></div>
-      <div id="quotesAr">—</div>
-    </div>
-  </div>
-  <div class="progress"><div class="progress-bar" id="progressAr"></div></div>
-</div>
-
-
-
-    <!-- Footer Section -->
-    <div class="footer box">
+    <!-- Footer (bottom-right spanning two columns) -->
+    <div class="box" id="boxFooter">
       <div class="footer-right" id="footerNext">
         <span class="next-label" id="nextLabel">—</span>
         <span class="next-time" id="nextTime">--</span>
