@@ -2,17 +2,17 @@ let refreshIntervalAr = 60;
 let remainingAr = refreshIntervalAr;
 
 // === Helper: auto-fit font size (shrink only, robust) ===
-function fitQuoteFont(quoteEl, baseSize = 22, minSize = 12) {
+function fitQuoteFont(quoteEl, baseSize = 2, minSize = 1. 2) {
   const parent = quoteEl.parentElement;
 
   // reset to base font size every time
   let fontSize = baseSize;
-  quoteEl.style.fontSize = fontSize + "px";
+  quoteEl.style.fontSize = fontSize + "rem";
 
   // shrink until it fits inside parent
   while (quoteEl.scrollHeight > parent.clientHeight && fontSize > minSize) {
     fontSize -= 1;
-    quoteEl.style.fontSize = fontSize + "px";
+    quoteEl.style.fontSize = fontSize + "rem";
   }
 }
 
@@ -31,7 +31,7 @@ async function loadQuoteAr() {
     quoteTitleEl.textContent = title;
 
     // auto-fit font size
-    fitQuoteFont(quoteEl, 22, 12);
+    fitQuoteFont(quoteEl, 2, 1.2);
 
     // update refresh interval
     refreshIntervalAr = Math.min(90, Math.max(5, body.length * 1.2 / 20));
