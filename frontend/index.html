@@ -18,40 +18,51 @@
 </head>
 <body>
   <div class="container">
-    <!-- Left: Albanian quotes (full height) -->
-    <div class="box" id="boxQuotesSq">
-      <div class="quote-box" id="quoteBoxSq">
-        <div class="quote-title" id="quoteTitleSq"></div>
-        <div id="quotesSq">—</div>
+
+    <!-- Left column: Albanian quotes -->
+    <div class="quote-box-container" id="quoteBoxContainerSq">
+      <div class="box" id="boxQuotesSq">
+        <div class="quote-box" id="quoteBoxSq">
+          <div class="quote-title" id="quoteTitleSq"></div>
+          <div id="quotesSq">—</div>
+        </div>
       </div>
       <div class="progress"><div class="progress-bar" id="progressSq"></div></div>
     </div>
 
-    <!-- Top-right: Arabic quotes -->
-    <div class="box" id="boxQuotesAr">
-      <div class="quote-box" id="quoteBoxAr">
-        <div class="quote-title" id="quoteTitleAr"></div>
-        <div id="quotesAr">—</div>
-      </div>
-      <div class="progress"><div class="progress-bar" id="progressAr"></div></div>
-    </div>
+    <!-- Right column: nested grid -->
+    <div id="quoteBoxContainerAr">
 
-    <!-- Top-right: Prayer times -->
-    <div class="box" id="boxPrayer">
-      <div class="info-time" id="currentClock">--:--</div>
-      <div class="info-date" id="weekday">—</div>
-      <div class="info-date" id="hijriDate">—</div>
-      <div class="info-date" id="gregDate">—</div>
-      <div class="times-box" id="timesBox"></div>
-    </div>
-
-    <!-- Footer (bottom-right spanning two columns) -->
-    <div class="box" id="boxFooter">
-      <div class="footer-right" id="footerNext">
-        <span class="next-label" id="nextLabel">—</span>
-        <span class="next-time" id="nextTime">--</span>
+      <!-- Top-left: Arabic quotes -->
+      <div class="quote-box-container">
+        <div class="box" id="boxQuotesAr">
+          <div class="quote-box" id="quoteBoxAr">
+            <div class="quote-title" id="quoteTitleAr"></div>
+            <div id="quotesAr">—</div>
+          </div>
+        </div>
+        <div class="progress"><div class="progress-bar" id="progressAr"></div></div>
       </div>
-    </div>
+
+      <!-- Top-right: Prayer times -->
+      <div class="box" id="boxPrayer">
+        <div class="info-time" id="currentClock">--:--</div>
+        <div class="info-date" id="weekday">—</div>
+        <div class="info-date" id="hijriDate">—</div>
+        <div class="info-date" id="gregDate">—</div>
+        <div class="times-box" id="timesBox"></div>
+      </div>
+
+      <!-- Bottom: Footer (spans full row) -->
+      <div class="box" id="boxFooter">
+        <div class="footer-right" id="footerNext">
+          <span class="next-label" id="nextLabel">—</span>
+          <span class="next-time" id="nextTime">--</span>
+        </div>
+      </div>
+
+    </div> <!-- end right column -->
+
   </div>
 
   <!-- Libraries -->

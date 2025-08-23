@@ -5,20 +5,18 @@ body {
   background-size: cover;
   color: #fff;
   height: 100vh;
+  width: 100vw;
   display: flex;
   justify-content: center;
   align-items: stretch;
 }
 
-/* === Main grid layout === */
+/* === Main grid: full screen fixed === */
 .container {
   display: grid;
-  grid-template-columns: 2fr 1fr 1fr; /* left half + two right columns */
-  grid-template-rows: 1fr auto;       /* top area + footer row */
-  gap: 40px;
-  width: 100%;
-  padding: 40px;
-  min-height: 100vh;
+  grid-template-columns: 1fr 1fr; /* left half | right half */
+  grid-template-rows: 100%;       /* full screen height */
+  padding: 3vmin;
 }
 
 /* === Generic box style === */
@@ -26,61 +24,83 @@ body {
   background: rgba(30,30,30,0.4);
   backdrop-filter: blur(14px);
   border-radius: 24px;
-  padding: 20px;
   box-shadow: 0 8px 24px rgba(0,0,0,0.5);
   display: flex;
-  flex-direction: column;
+  justify-content: center;
   align-items: center;
-  justify-content: flex-start;
   position: relative;
   z-index: 1;
-  box-sizing: border-box;
-}
-
-/* === Layout placements === */
-#boxQuotesSq {        /* Albanian quotes, left column full height */
-  grid-column: 1 / 2;
-  grid-row: 1 / 3;
+  width: 100%;
   height: 100%;
+  overflow: hidden; /* stop content from forcing growth */
 }
 
-#boxQuotesAr {        /* Arabic quotes, top-right left */
+/* === Left column: Albanian quotes (full half) === */
+#quoteBoxContainerSq {
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  padding-right: 3vmin;
+}
+
+/* === Right column: nested fixed grid === */
+#quoteBoxContainerAr {
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* two equal halves */
+  grid-template-rows: 85% 15%;    /* top row & footer ratio */
+  width: 100%;
+  height: 100%;
+  gap: 3vmin;
+  box-sizing: border-box;
+  padding-bottom: 3vmin;
+}
+
+/* Arabic quotes (row1, col1) */
+#boxQuotesAr {
+  grid-column: 1 / 2;
+  grid-row: 1 / 2;
+}
+
+/* Prayer times (row1, col2) */
+#boxPrayer {
   grid-column: 2 / 3;
   grid-row: 1 / 2;
 }
 
-#boxPrayer {          /* Prayer times, top-right right */
-  grid-column: 3 / 4;
-  grid-row: 1 / 2;
-}
-
-#boxFooter {          /* Footer spans under right side */
-  grid-column: 2 / 4;
+/* Footer (row2, spans both) */
+#boxFooter {
+  grid-column: 1 / 3;
   grid-row: 2 / 3;
-  align-self: end;
 }
 
-/* === Quote inner box === */
+/* === Quote + Progress container === */
+.quote-box-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+/* Inner quote box */
 .quote-box {
-  flex: 1;
+  width: 100%;
+  height: 100%;
+  text-align: center;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  text-align: center;
-  padding: 1vh 5vw 20px;
+  z-index: 2;
+  padding: 0 7%;
 }
 
-/* === Progress bars (can be reused inside quote boxes) === */
+/* Progress bar behind */
 .progress {
   position: absolute;
-  bottom: -20px;
+  bottom: 3%;
   left: 50%;
   transform: translateX(-50%);
-  height: 12px;
-  width: 60%;
-  background: rgba(255, 255, 255, 0.5);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
+  width: 80%;
+  height: 16px;
+  background: rgba(255, 255, 255, 0.35);
   border-radius: 24px;
   overflow: hidden;
   z-index: 0;

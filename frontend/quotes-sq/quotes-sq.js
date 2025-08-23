@@ -11,7 +11,7 @@ function fitQuoteFont(quoteEl, baseSize = 2.1, minSize = 1.2) {
 
   // shrink until it fits inside parent
   while (quoteEl.scrollHeight > parent.clientHeight && fontSize > minSize) {
-    fontSize -= 1;
+    fontSize -= 0.1;
     quoteEl.style.fontSize = fontSize + "rem";
   }
 }

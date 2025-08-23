@@ -2,14 +2,10 @@
   display: flex;                 /* use flexbox */
   justify-content: center;       /* center content horizontally */
   align-items: center;           /* center content vertically */
-
   padding: 0 !important;             /* small padding for slim height */
   grid-column: 1 / -1;           /* span full width across grid */
-  max-height: 32px;
   font-family: "Montserrat", sans-serif;
-  color: #76d3ff;
-  max-height: 10vh;
-  
+  color: #76d3ff;  
   line-height: 0.1;  /* tighter vertical alignment */
 }
 
