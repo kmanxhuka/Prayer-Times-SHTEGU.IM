@@ -12,17 +12,17 @@
 /* Next prayer info */
 .footer-right {
   display: flex;
-  gap: 8px;                      /* space between label and time */
+  gap: 1vw;                      /* space between label and time */
   align-items: baseline;         /* align numbers nicely */
 }
 
 .next-label {
-  font-size: 16px;
+  font-size: 2vw;
   color: #cfe1ff;
 }
 
 .next-time {
-  font-size: 18px;
+  font-size: 2vw;
   font-weight: 700;
   color: #1ee3ae;
 }

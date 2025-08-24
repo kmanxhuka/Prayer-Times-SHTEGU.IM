@@ -2,7 +2,7 @@ let refreshIntervalAr = 60;
 let remainingAr = refreshIntervalAr;
 
 // === Helper: auto-fit font size (shrink only, robust) ===
-function fitQuoteFont(quoteEl, baseSize = 2, minSize = 1.2) {
+function fitQuoteFont(quoteEl, baseSize = 1.8, minSize = 1.2) {
   const parent = quoteEl.parentElement;
 
   // reset to base font size every time
@@ -31,7 +31,7 @@ async function loadQuoteAr() {
     quoteTitleEl.textContent = title;
 
     // auto-fit font size
-    fitQuoteFont(quoteEl, 2, 1.2);
+    fitQuoteFont(quoteEl, 1.8, 1.2);
 
     // update refresh interval
     refreshIntervalAr = Math.min(90, Math.max(5, body.length * 1.2 / 20));
