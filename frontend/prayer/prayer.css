@@ -3,7 +3,7 @@
   grid-template-columns: 1fr;
   grid-template-rows: 5% 5% 5% 5% 80%;
   place-items: center;
-  padding: 3vh 2vw 3vh;
+  padding: 5vh 2vw 3vh;
   box-sizing: border-box;
 }
 
