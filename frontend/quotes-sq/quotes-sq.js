@@ -16,6 +16,8 @@ function fitQuoteFont(quoteEl, baseSize = 2, minSize = 1.5) {
   }
 }
 
+const progressSq = document.getElementById("progressSq");
+
 async function loadQuoteSq() {
   const sq = await fetch("/api/quotes-sq").then(r => r.json());
   if (sq.quote) {
@@ -33,21 +35,20 @@ async function loadQuoteSq() {
     // auto-fit font size
     fitQuoteFont(quoteEl, 2, 1.5);
 
-    // update refresh interval
+    // update refresh interval based on content length
     refreshIntervalSq = Math.min(90, Math.max(5, body.length * 1.2 / 20));
     remainingSq = refreshIntervalSq;
-    progressSq.style.transform = "scaleX(1)"; // ✅ reset full bar
+
+    // restart smooth CSS animation for the progress bar
+    progressSq.style.animation = "none";
+    // force reflow to allow the same animation name to restart
+    void progressSq.offsetWidth;
+    progressSq.style.animation = `progressShrink ${refreshIntervalSq}s linear forwards`;
   }
 }
 
-const progressSq = document.getElementById("progressSq");
+// when the animation ends, fetch the next quote
+progressSq.addEventListener("animationend", loadQuoteSq);
 
-function updateProgressSq() {
-  if (remainingSq > 0) remainingSq -= 0.1;
-  const percent = (remainingSq / refreshIntervalSq * 100);
-  progressSq.style.transform = `scaleX(${percent / 100})`; // ✅ smooth shrink
-  if (remainingSq <= 0) loadQuoteSq();
-}
-
+// initial load
 loadQuoteSq();
-setInterval(updateProgressSq, 100);

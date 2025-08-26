@@ -111,8 +111,24 @@ body {
   height: 100%;
   width: 100%;
   transform-origin: left center;
-  transition: transform 0.3s linear;
   will-change: transform;
   background: linear-gradient(90deg, #f4cb17, #faf0a3);
   border-radius: inherit;
+
+  /* NEW: start full; animation applied from JS */
+  transform: scaleX(1);
+}
+
+/* GPU-friendly progress shrinking */
+@keyframes progressShrink {
+  from { transform: scaleX(1); }
+  to   { transform: scaleX(0); }
+}
+
+/* Optional: respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .progress-bar {
+    animation: none !important;
+    transform: scaleX(0);
+  }
 }
