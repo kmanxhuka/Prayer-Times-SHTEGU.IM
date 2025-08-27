@@ -124,11 +124,3 @@ body {
   from { transform: scaleX(1); }
   to   { transform: scaleX(0); }
 }
-
-/* Optional: respect reduced motion */
-@media (prefers-reduced-motion: reduce) {
-  .progress-bar {
-    animation: none !important;
-    transform: scaleX(0);
-  }
-}
