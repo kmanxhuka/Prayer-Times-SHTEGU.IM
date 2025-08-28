@@ -36,22 +36,19 @@ async function loadQuoteSq() {
     // auto-fit font size
     fitQuoteFont(quoteEl, 2, 1.5);
 
-    // update refresh interval based on content length (seconds)
+    // update refresh interval based on content length
     refreshIntervalSq = Math.min(90, Math.max(5, body.length * 1.2 / 20));
 
-    // Ensure bar starts full, then restart width-based animation
-    progressSq.style.width = "100%";
+    // restart smooth transform-based CSS animation
     progressSq.style.animation = "none";
-    // force reflow to allow the same animation name to restart
-    void progressSq.offsetWidth;
+    void progressSq.offsetWidth; // force reflow to restart
     progressSq.style.animation = `progressShrink ${refreshIntervalSq}s linear forwards`;
   } catch (e) {
-    // If fetch fails, try again next time the current animation ends
     console.error("Failed to load Albanian quote:", e);
   }
 }
 
-// when the animation ends (width reached 0), fetch the next quote
+// when the animation ends, fetch the next quote
 progressSq.addEventListener("animationend", loadQuoteSq);
 
 // initial load
