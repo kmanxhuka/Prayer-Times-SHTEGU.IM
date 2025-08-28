@@ -110,17 +110,12 @@ body {
 .progress-bar {
   height: 100%;
   width: 100%;
-  transform-origin: left center;
-  will-change: transform;
   background: linear-gradient(90deg, #f4cb17, #faf0a3);
   border-radius: inherit;
-
-  /* NEW: start full; animation applied from JS */
-  transform: scaleX(1);
+  animation: progressShrink 30s linear forwards;
 }
 
-/* GPU-friendly progress shrinking */
 @keyframes progressShrink {
-  from { transform: scaleX(1); }
-  to   { transform: scaleX(0); }
+from { width: 100%; }
+to { width: 0%; }
 }
