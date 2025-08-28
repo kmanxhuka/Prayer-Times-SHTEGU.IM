@@ -1,5 +1,4 @@
 let refreshIntervalSq = 60;
-let remainingSq = refreshIntervalSq;
 
 // === Helper: auto-fit font size (shrink only, robust) ===
 function fitQuoteFont(quoteEl, baseSize = 2, minSize = 1.5) {
@@ -19,8 +18,10 @@ function fitQuoteFont(quoteEl, baseSize = 2, minSize = 1.5) {
 const progressSq = document.getElementById("progressSq");
 
 async function loadQuoteSq() {
-  const sq = await fetch("/api/quotes-sq").then(r => r.json());
-  if (sq.quote) {
+  try {
+    const sq = await fetch("/api/quotes-sq").then(r => r.json());
+    if (!sq || !sq.quote) return;
+
     const parts = sq.quote.trim().split("\n");
     const title = parts.pop();
     const body = parts.join("\n");
@@ -35,19 +36,22 @@ async function loadQuoteSq() {
     // auto-fit font size
     fitQuoteFont(quoteEl, 2, 1.5);
 
-    // update refresh interval based on content length
+    // update refresh interval based on content length (seconds)
     refreshIntervalSq = Math.min(90, Math.max(5, body.length * 1.2 / 20));
-    remainingSq = refreshIntervalSq;
 
-    // restart smooth CSS animation for the progress bar
+    // Ensure bar starts full, then restart width-based animation
+    progressSq.style.width = "100%";
     progressSq.style.animation = "none";
     // force reflow to allow the same animation name to restart
     void progressSq.offsetWidth;
     progressSq.style.animation = `progressShrink ${refreshIntervalSq}s linear forwards`;
+  } catch (e) {
+    // If fetch fails, try again next time the current animation ends
+    console.error("Failed to load Albanian quote:", e);
   }
 }
 
-// when the animation ends, fetch the next quote
+// when the animation ends (width reached 0), fetch the next quote
 progressSq.addEventListener("animationend", loadQuoteSq);
 
 // initial load
