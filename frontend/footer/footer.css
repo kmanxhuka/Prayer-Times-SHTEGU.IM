@@ -5,7 +5,7 @@
   padding: 0 !important;             /* small padding for slim height */
   grid-column: 1 / -1;           /* span full width across grid */
   font-family: "Montserrat", sans-serif;
-  color: #76d3ff;  
+  color: var(--accent-color);
   line-height: 0.1;  /* tighter vertical alignment */
 }
 
@@ -18,11 +18,11 @@
 
 .next-label {
   font-size: 2vw;
-  color: #cfe1ff;
+  color: var(--secondary-accent);
 }
 
 .next-time {
   font-size: 2vw;
   font-weight: 700;
-  color: #1ee3ae;
+  color: var(--success-color);
 }

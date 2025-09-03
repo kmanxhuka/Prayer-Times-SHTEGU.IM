@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Admin - Theme</title>
+  <link rel="stylesheet" href="shared.css">
+  <style>
+    body { flex-direction: column; gap: 1rem; }
+    #themeSelect { padding: 0.5rem; font-size: 1rem; }
+  </style>
+</head>
+<body>
+  <h1>Select Theme</h1>
+  <select id="themeSelect">
+    <option value="default">Default</option>
+    <option value="light">Light</option>
+    <option value="dark">Dark</option>
+  </select>
+  <script src="theme.js"></script>
+  <script>
+    const select = document.getElementById('themeSelect');
+    const current = localStorage.getItem('theme') || 'default';
+    select.value = current;
+    select.addEventListener('change', function() {
+      setTheme(this.value);
+    });
+  </script>
+</body>
+</html>
