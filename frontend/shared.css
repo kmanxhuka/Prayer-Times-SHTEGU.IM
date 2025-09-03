@@ -161,3 +161,23 @@ body.theme-dark {
   --quote-text-color: #f5f5f5;
   background: #0f0f0f;
 }
+  --text-color: #000;
+  --box-bg: rgba(255, 255, 255, 0.8);
+  --accent-color: #007acc;
+  --secondary-accent: #005a99;
+  --success-color: #00732d;
+  --progress-bg: rgba(0, 0, 0, 0.15);
+  --progress-bar-bg: linear-gradient(90deg, #007acc, #a0d3ff);
+  background: #f5f5f5;
+}
+
+body.theme-dark {
+  --text-color: #fff;
+  --box-bg: rgba(0, 0, 0, 0.6);
+  --accent-color: #76d3ff;
+  --secondary-accent: #cfe1ff;
+  --success-color: #1ee3ae;
+  --progress-bg: rgba(255, 255, 255, 0.35);
+  --progress-bar-bg: linear-gradient(90deg, #f4cb17, #faf0a3);
+  background: #000;
+}

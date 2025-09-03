@@ -5,6 +5,7 @@
   font-size: clamp(16px, 1vw, 36px); /* keep responsive title */
   margin-bottom: 12px;
   color: var(--quote-title-color);
+  color: var(--accent-color);
 }
 
 /* Albanian text */
