@@ -4,7 +4,7 @@
   font-weight: 700;
   font-size: clamp(16px, 1vw, 36px); /* keep responsive title */
   margin-bottom: 12px;
-  color: #76d3ff;
+  color: var(--quote-title-color);
 }
 
 /* Arabic text */
@@ -17,4 +17,5 @@
   white-space: pre-line;
   text-wrap: balance;
   transition: font-size 0.2s ease; /* smooth resizing */
+  color: var(--quote-text-color);
 }

@@ -3,12 +3,23 @@ body {
   font-family: "Montserrat", system-ui, sans-serif;
   background: url('https://images.unsplash.com/photo-1619441207978-3d326c46e2c9?ixlib=rb-4.0.3&auto=format&fit=crop&w=1950&q=80') no-repeat center center fixed;
   background-size: cover;
-  color: #fff;
+  color: var(--text-color);
   height: 100vh;
   width: 100vw;
   display: flex;
   justify-content: center;
   align-items: stretch;
+
+  /* default theme variables */
+  --text-color: #fff;
+  --box-bg: rgba(30,30,30,0.4);
+  --accent-color: #76d3ff;
+  --secondary-accent: #cfe1ff;
+  --success-color: #1ee3ae;
+  --progress-bg: rgba(255, 255, 255, 0.35);
+  --progress-bar-bg: linear-gradient(90deg, #f4cb17, #faf0a3);
+  --quote-title-color: var(--accent-color);
+  --quote-text-color: var(--text-color);
 }
 
 /* === Main grid: full screen fixed === */
@@ -21,7 +32,7 @@ body {
 
 /* === Generic box style === */
 .box {
-  background: rgba(30,30,30,0.4);
+  background: var(--box-bg);
   backdrop-filter: blur(14px);
   border-radius: 24px;
   box-shadow: 0 8px 24px rgba(0,0,0,0.5);
@@ -100,7 +111,7 @@ body {
     transform: translateX(-50%);
     width: 80%;
     height: 16px;
-    background: rgba(255, 255, 255, 0.35);
+    background: var(--progress-bg);
     border-radius: 24px;
     overflow: hidden;
     z-index: 0;
@@ -109,7 +120,7 @@ body {
 
   .progress-bar {
     height: 100%;
-    background: linear-gradient(90deg, #f4cb17, #faf0a3);
+    background: var(--progress-bar-bg);
     border-radius: inherit;
 
     /* GPU-friendly transform animation */
@@ -123,3 +134,30 @@ body {
     from { transform: scaleX(1); }
     to   { transform: scaleX(0); }
   }
+
+/* === Theme overrides === */
+body.theme-light {
+  --text-color: #271c14;
+  --box-bg: #fffffd;
+  --accent-color: #007acc;
+  --secondary-accent: #005a99;
+  --success-color: #00732d;
+  --progress-bg: #faf0a3;
+  --progress-bar-bg: #f4cb17;
+  --quote-title-color: #b8860b;
+  --quote-text-color: #271c14;
+  background: #fdf9e8;
+}
+
+body.theme-dark {
+  --text-color: #f5f5f5;
+  --box-bg: #272727;
+  --accent-color: #76d3ff;
+  --secondary-accent: #cfe1ff;
+  --success-color: #1ee3ae;
+  --progress-bg: #404040;
+  --progress-bar-bg: #f4cb17;
+  --quote-title-color: #c4a869;
+  --quote-text-color: #f5f5f5;
+  background: #0f0f0f;
+}
