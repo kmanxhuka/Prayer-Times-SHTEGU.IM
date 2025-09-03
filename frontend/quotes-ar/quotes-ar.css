@@ -4,7 +4,7 @@
   font-weight: 700;
   font-size: clamp(16px, 1vw, 36px); /* keep responsive title */
   margin-bottom: 12px;
-  color: #76d3ff;
+  color: var(--accent-color);
 }
 
 /* Arabic text */
