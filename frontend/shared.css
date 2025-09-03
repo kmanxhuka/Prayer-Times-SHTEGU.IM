@@ -18,6 +18,8 @@ body {
   --success-color: #1ee3ae;
   --progress-bg: rgba(255, 255, 255, 0.35);
   --progress-bar-bg: linear-gradient(90deg, #f4cb17, #faf0a3);
+  --quote-title-color: var(--accent-color);
+  --quote-text-color: var(--text-color);
 }
 
 /* === Main grid: full screen fixed === */
@@ -135,6 +137,30 @@ body {
 
 /* === Theme overrides === */
 body.theme-light {
+  --text-color: #271c14;
+  --box-bg: #fffffd;
+  --accent-color: #007acc;
+  --secondary-accent: #005a99;
+  --success-color: #00732d;
+  --progress-bg: #faf0a3;
+  --progress-bar-bg: #f4cb17;
+  --quote-title-color: #b8860b;
+  --quote-text-color: #271c14;
+  background: #fdf9e8;
+}
+
+body.theme-dark {
+  --text-color: #f5f5f5;
+  --box-bg: #272727;
+  --accent-color: #76d3ff;
+  --secondary-accent: #cfe1ff;
+  --success-color: #1ee3ae;
+  --progress-bg: #404040;
+  --progress-bar-bg: #f4cb17;
+  --quote-title-color: #c4a869;
+  --quote-text-color: #f5f5f5;
+  background: #0f0f0f;
+}
   --text-color: #000;
   --box-bg: rgba(255, 255, 255, 0.8);
   --accent-color: #007acc;
