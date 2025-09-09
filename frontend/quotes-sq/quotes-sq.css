@@ -11,10 +11,10 @@
 /* Albanian text */
 #quotesSq {
   font-family: "Aref Ruqaa", serif;
-  font-size: 2vmax; /* default starting size, JS will shrink if needed */
+  font-size: 2.5vw; /* default starting size, JS will shrink if needed */
   line-height: 1.6;
   white-space: pre-line;
-  text-wrap: balance;
+  text-wrap: pretty;
   transition: font-size 0.2s ease; /* smooth resizing */
   color: var(--quote-text-color);
 }

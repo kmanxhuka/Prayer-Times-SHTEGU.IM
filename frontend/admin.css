@@ -1,0 +1,136 @@
+/* Page layout */
+body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  max-height: 90%;
+  gap: 1vmin;
+  padding: 1vmin;
+}
+h1 {
+  margin: 0.25rem 0 0.5rem;
+  text-align: center;
+}
+
+
+/* Sections */
+.section {
+  display: grid;
+  gap: 0.5rem;
+  padding: 1rem;
+  background: rgba(30,30,30,0.25);
+  border-radius: 12px;
+  backdrop-filter: blur(6px);
+  max-width: 80%;
+  min-width:50%;
+}
+.section h2 {
+  margin: 0;
+  font-size: 1.1rem;
+}
+
+/* Theme select */
+#themeSelect {
+  padding: 0.5rem;
+  font-size: 1rem;
+}
+
+/* Background thumbnails */
+.thumbs {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 0.5rem;
+}
+.thumb {
+  position: relative;
+  padding: 0;
+  border: 0;
+  cursor: pointer;
+  border-radius: 10px;
+  overflow: hidden;
+  outline: 2px solid transparent;
+  background: transparent;
+}
+.thumb img {
+  width: 100%;
+  height: 80px;
+  object-fit: cover;
+  display: block;
+}
+.thumb.active {
+  outline-color: var(--accent-color, #76d3ff);
+}
+
+.bg-option {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.bg-url {
+  width: 100%;
+  padding: 0.3rem;
+  font-size: 0.85rem;
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 6px;
+  background: rgba(0,0,0,0.2);
+  color: var(--text-color);
+}
+
+/* Unsplash search */
+.bg-search {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+#bgSearchInput {
+  flex: 1;
+  padding: 0.4rem;
+  font-size: 0.9rem;
+  border-radius: 6px;
+  border: 1px solid rgba(255,255,255,0.3);
+  background: rgba(0,0,0,0.2);
+  color: var(--text-color);
+}
+#bgSearchBtn {
+  padding: 0.4rem 0.8rem;
+  font-size: 0.9rem;
+  border-radius: 6px;
+  border: 0;
+  cursor: pointer;
+  background: var(--accent-color, #76d3ff);
+  color: #fff;
+}
+
+/* Iqama section */
+.iqama-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 0.5rem;
+}
+.iqama-grid label {
+  display: flex;
+  flex-direction: column;
+  font-size: 0.9rem;
+}
+.iqama-grid input {
+  margin-top: 0.2rem;
+  padding: 0.3rem;
+  font-size: 0.9rem;
+  border-radius: 6px;
+  border: 1px solid rgba(255,255,255,0.3);
+  background: rgba(0,0,0,0.2);
+  color: var(--text-color);
+}
+
+#saveIqamaBtn {
+  margin-top: 0.8rem;
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+  border-radius: 6px;
+  border: 0;
+  cursor: pointer;
+  background: var(--accent-color, #76d3ff);
+  color: #fff;
+}

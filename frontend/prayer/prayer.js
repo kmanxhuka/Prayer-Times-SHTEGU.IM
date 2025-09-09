@@ -21,7 +21,20 @@ function render() {
     if (i === currentIndex) {
       div.classList.add('active'); // highlight current prayer
     }
-    div.innerHTML = `<div class="prayer-name">${p.name}</div><div class="prayer-time">${p.time}</div>`;
+    // get iqama offset from localStorage (fallback 10 min)
+    const offset = parseInt(localStorage.getItem("iqama_" + p.key) || "10", 10);
+    div.innerHTML = `
+      <div class="prayer-name">${p.name}</div>
+      <div class="prayer-row">
+        <div class="prayer-col">
+          <div class="col-title">Koha</div>
+          <div class="col-time">${p.time}</div>
+        </div>
+        <div class="prayer-col">
+          <div class="col-title">Ikameti</div>
+          <div class="col-time">${dayjs(p.at).add(offset, 'minute').format('HH:mm')}</div>
+        </div>
+      </div>`;
     box.appendChild(div);
   });
 }
@@ -49,7 +62,20 @@ function tick() {
     }
   }
 
-  if (next) {
+  // === Footer update ===
+  let iqamaTime = null;
+  if (currentIndex >= 0 && prayers[currentIndex]) {
+    const offset = parseInt(localStorage.getItem("iqama_" + prayers[currentIndex].key) || "10", 10);
+    iqamaTime = dayjs(prayers[currentIndex].at).add(offset, 'minute');
+  }
+
+  if (iqamaTime && now.isBefore(iqamaTime)) {
+    // Between adhan and iqama
+    const diff = iqamaTime.diff(now, 'minute');
+    $('#nextLabel').textContent = "Ikameti edhe";
+    $('#nextTime').textContent = `${diff} min`;
+  } else if (next) {
+    // Next prayer countdown
     const diff = next.at.diff(now);
     const mins = Math.floor(diff / 60000);
     if (mins > 59) {
@@ -122,16 +148,43 @@ async function loadCsv(text) {
     { key: 'isha', name: 'Jacia' }
   ].map(item => {
     const col = idx[item.key];
-    const time = row[col];
+    const time = row[col]?.trim();
     if (!time || !time.includes(':')) return null;
     const [h, m] = time.split(':').map(Number);
     const at = today.startOf('day').set('hour', h).set('minute', m).set('second', 0);
-    return { name: item.name, time, at };
+    return { key: item.key, name: item.name, time, at };
   }).filter(Boolean);
 
-  setInterval(tick, 1000); 
+  if (!window._tickStarted) {
+    setInterval(tick, 1000); 
+    window._tickStarted = true;
+  }
   tick();
 }
 
 fetch("prayer_times.csv").then(r => r.text()).then(loadCsv);
 loadHijri();
+
+// Listen for updates from admin page
+window.addEventListener("storage", (e) => {
+  if (!e.key) return;
+
+  // Re-render prayers if iqama updated
+  if (e.key.startsWith("iqama_") || e.key === "iqama_updated" || e.key === "admin_saved") {
+    render();
+  }
+
+  // Theme change
+  if (e.key === "theme" || e.key === "admin_saved") {
+    const theme = localStorage.getItem("theme") || "default";
+    document.body.classList.remove("theme-light", "theme-dark");
+    if (theme === "light") document.body.classList.add("theme-light");
+    if (theme === "dark") document.body.classList.add("theme-dark");
+  }
+
+  // Background change
+  if (e.key === "bg" || e.key === "admin_saved") {
+    const bg = localStorage.getItem("bg");
+    if (bg) document.body.style.setProperty("--bg-image", `url('${bg}')`);
+  }
+});

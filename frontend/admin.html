@@ -2,28 +2,83 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <title>Admin - Theme</title>
+  <title>Admin - Appearance</title>
   <link rel="stylesheet" href="shared.css">
-  <style>
-    body { flex-direction: column; gap: 1rem; }
-    #themeSelect { padding: 0.5rem; font-size: 1rem; }
-  </style>
+  <link rel="stylesheet" href="admin.css">
 </head>
 <body>
-  <h1>Select Theme</h1>
-  <select id="themeSelect">
-    <option value="default">Default</option>
-    <option value="light">Light</option>
-    <option value="dark">Dark</option>
-  </select>
+  <h1>Appearance</h1>
+
+  <!-- Theme section -->
+  <div class="section" id="themeSection">
+    <h2>Theme</h2>
+    <select id="themeSelect">
+      <option value="default">Default</option>
+      <option value="light">Light</option>
+      <option value="dark">Dark</option>
+    </select>
+  </div>
+
+  <!-- Background section -->
+  <div class="section" id="backgroundSection">
+    <h2>Background</h2>
+
+    <!-- Unsplash search -->
+    <div class="bg-search">
+      <input type="text" id="bgSearchInput" placeholder="Search Unsplash…">
+      <button id="bgSearchBtn">Search</button>
+    </div>
+    <div class="thumbs dynamic-thumbs"></div>
+
+    <!-- Static slots -->
+    <div class="thumbs">
+      <div class="bg-option">
+        <button class="thumb" data-bg="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1950&q=80">
+          <img src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=400&q=60" alt="BG 1">
+        </button>
+        <input type="text" class="bg-url" placeholder="Paste custom URL…">
+      </div>
+      <div class="bg-option">
+        <button class="thumb" data-bg="https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=1950&q=80">
+          <img src="https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=400&q=60" alt="BG 2">
+        </button>
+        <input type="text" class="bg-url" placeholder="Paste custom URL…">
+      </div>
+      <div class="bg-option">
+        <button class="thumb" data-bg="https://images.unsplash.com/photo-1483728642387-6c3bdd6c93e5?auto=format&fit=crop&w=1950&q=80">
+          <img src="https://images.unsplash.com/photo-1483728642387-6c3bdd6c93e5?auto=format&fit=crop&w=400&q=60" alt="BG 3">
+        </button>
+        <input type="text" class="bg-url" placeholder="Paste custom URL…">
+      </div>
+      <div class="bg-option">
+        <button class="thumb" data-bg="https://images.unsplash.com/photo-1470770903676-69b98201ea1c?auto=format&fit=crop&w=1950&q=80">
+          <img src="https://images.unsplash.com/photo-1470770903676-69b98201ea1c?auto=format&fit=crop&w=400&q=60" alt="BG 4">
+        </button>
+        <input type="text" class="bg-url" placeholder="Paste custom URL…">
+      </div>
+      <div class="bg-option">
+        <button class="thumb" data-bg="https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=1950&q=80">
+          <img src="https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=400&q=60" alt="BG 5">
+        </button>
+        <input type="text" class="bg-url" placeholder="Paste custom URL…">
+      </div>
+    </div>
+  </div>
+
+  <!-- Iqama section -->
+  <div class="section" id="iqamaSection">
+    <h2>Iqama Offsets (minutes)</h2>
+    <div class="iqama-grid">
+      <label>Sabahu <input type="number" id="iqama-fajr" min="0" value="10"></label>
+      <label>Dreka <input type="number" id="iqama-dhuhr" min="0" value="10"></label>
+      <label>Ikindia <input type="number" id="iqama-asr" min="0" value="10"></label>
+      <label>Akshami <input type="number" id="iqama-maghrib" min="0" value="10"></label>
+      <label>Jacia <input type="number" id="iqama-isha" min="0" value="10"></label>
+    </div>
+    <button id="saveIqamaBtn">Save</button>
+  </div>
+
   <script src="theme.js"></script>
-  <script>
-    const select = document.getElementById('themeSelect');
-    const current = localStorage.getItem('theme') || 'default';
-    select.value = current;
-    select.addEventListener('change', function() {
-      setTheme(this.value);
-    });
-  </script>
+  <script src="admin.js"></script>
 </body>
 </html>
